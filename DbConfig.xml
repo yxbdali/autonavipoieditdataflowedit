@@ -1,0 +1,8 @@
+<DataBaseConfig>
+  <configName>Db Config 1</configName>
+  <server>10.17.129.217</server>
+  <port>1521</port>
+  <sid>orcl</sid>
+  <user>USER_OUT_V108</user>
+  <password>testgdpoi</password>
+</DataBaseConfig>

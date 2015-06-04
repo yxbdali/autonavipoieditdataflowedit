@@ -1,0 +1,78 @@
+﻿<DataFlowQuery>
+  <dataFlowType>专项生产线</dataFlowType>
+  <TaskQueryItem>
+    <tableName>tdb_post_inner_task</tableName>
+    <clause>WHERE TASK_ID = &apos;[TASKID]&apos;</clause>
+    <taskStage>业内生产</taskStage>
+    <TableQueryItem>
+      <tableName>MDB_POI_EDIT</tableName>
+      <clause>WHERE mdb_poi_edit.guid in (SELECT feature_id FROM tdb_data_flow WHERE task_id = &apos;[TASKID]&apos;)</clause>
+      <clauseItem>GUID</clauseItem>
+      <viewColumnItem>GUID</viewColumnItem>
+      <viewColumnItem>NAME</viewColumnItem>
+    </TableQueryItem>
+	<TableQueryItem>
+      <tableName>MDB_POI</tableName>
+      <clause>WHERE mdb_poi.guid in (SELECT feature_id FROM tdb_data_flow WHERE task_id = &apos;[TASKID]&apos;)</clause>
+      <clauseItem>GUID</clauseItem>
+      <viewColumnItem>GUID</viewColumnItem>
+      <viewColumnItem>NAME</viewColumnItem>
+    </TableQueryItem>
+    <TableQueryItem>
+      <tableName>tdb_post_data_flow</tableName>
+      <clause>WHERE task_id = &apos;[TASKID]&apos;</clause>
+      <clauseItem>DATA_FLOW_ID</clauseItem>
+      <insertExcludeItem>DATA_FLOW_ID</insertExcludeItem>
+      <viewColumnItem>DATA_FlOW_ID</viewColumnItem>
+      <viewColumnItem>MATERIAL_ID</viewColumnItem>
+      <viewColumnItem>DATA_FLOW_TYPE</viewColumnItem>
+    </TableQueryItem>
+	<TableQueryItem>
+      <tableName>tdb_post_inner_userpack</tableName>
+      <clause>WHERE task_id = &apos;[TASKID]&apos;</clause>
+      <clauseItem>PACKAGE_ID</clauseItem>
+    </TableQueryItem>
+	<TableQueryItem>
+      <tableName>mdb_poi_chargepile_edit</tableName>
+      <clause>WHERE mdb_poi_chargepile_edit.guid in (SELECT feature_id FROM tdb_data_flow WHERE task_id = &apos;[TASKID]&apos;)</clause>
+      <clauseItem>CGUID</clauseItem>
+    </TableQueryItem>
+	<TableQueryItem>
+      <tableName>mdb_poi_chargepile</tableName>
+      <clause>WHERE mdb_poi_chargepile.guid in (SELECT feature_id FROM tdb_data_flow WHERE task_id = &apos;[TASKID]&apos;)</clause>
+      <clauseItem>CGUID</clauseItem>
+    </TableQueryItem>
+	
+	<TableQueryItem>
+      <tableName>tdb_qc_tag</tableName>
+      <clause>WHERE qc_tag_id IN (SELECT qc_tag_id FROM tdb_data_flow WHERE task_id = '[TASKID]')</clause>
+      <clauseItem>QC_TAG_ID</clauseItem>
+    </TableQueryItem>
+	<TableQueryItem>
+      <tableName>tdb_qc_tag_attr</tableName>
+      <clause>WHERE qc_tag_id IN (SELECT qc_tag_id FROM tdb_data_flow WHERE task_id = '[TASKID]')</clause>
+      <clauseItem>TAG_ATTR_ID</clauseItem>
+    </TableQueryItem>
+	
+	<TableQueryItem>
+      <tableName>REF_POST_THIRD_MAT</tableName>
+      <clause>WHERE material_id IN (SELECT material_id FROM tdb_post_data_flow WHERE task_id = '[TASKID]')</clause>
+      <clauseItem>MATERIAL_ID</clauseItem>
+    </TableQueryItem>
+	
+	<TableQueryItem>
+      <tableName>ref_rel_post_third_simi</tableName>
+      <clause>WHERE material_id IN (SELECT material_id FROM tdb_post_data_flow WHERE task_id = '[TASKID]')</clause>
+      <clauseItem>MATERIAL_ID</clauseItem>
+	  <clauseItem>FEATURE_ID</clauseItem>
+    </TableQueryItem>
+	
+	<TableQueryItem>
+      <tableName>ref_rel_post_third_invl</tableName>
+      <clause>WHERE material_id IN (SELECT material_id FROM tdb_post_data_flow WHERE task_id = '[TASKID]')</clause>
+      <clauseItem>MATERIAL_ID</clauseItem>
+	  <clauseItem>FEATURE_ID</clauseItem>
+    </TableQueryItem>
+	
+  </TaskQueryItem>
+</DataFlowQuery>

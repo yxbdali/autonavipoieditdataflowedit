@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.autonavi.data.test.fxui.FXMLChooseTaskTypeDlgDocumentController">
+    <padding>
+        <javafx.geometry.Insets top="20" bottom="20" left="20" right="20"/>    
+    </padding>
+    <rowConstraints>
+        <RowConstraints fillHeight="true" vgrow="ALWAYS"  /> 
+        <RowConstraints fillHeight="true" vgrow="ALWAYS" />   
+    </rowConstraints>
+    <HBox GridPane.rowIndex="0">
+        <children>
+            <Label text="Choose Task Stage:">
+                <HBox.margin>
+                    <javafx.geometry.Insets left="10" top="10" right="10" bottom="10"/> 
+                </HBox.margin>
+            </Label>
+            <ComboBox fx:id="TaskStageComboBox" promptText="Please choose task stage" >
+                <HBox.margin>
+                    <javafx.geometry.Insets left="10" top="10" right="10" bottom="10"/> 
+                </HBox.margin>
+            </ComboBox> 
+        </children>
+    </HBox> 
+    <HBox GridPane.rowIndex="1" alignment="BOTTOM_CENTER" >
+        <children>
+            <Button id="OKButton" text="OK" prefWidth="75" onAction="#OKButtonAction" >
+                <HBox.margin>
+                    <javafx.geometry.Insets left="10" top="10" right="10" bottom="10"/> 
+                </HBox.margin>
+            </Button> 
+            <Button id="CancelButton" text="Cancel" prefWidth="75">
+                <HBox.margin>
+                    <javafx.geometry.Insets left="10" top="10" right="10" bottom="10"/> 
+                </HBox.margin>
+            </Button> 
+        </children>
+    </HBox> 
+</GridPane>

@@ -1,0 +1,18 @@
+﻿<DbConfigList>
+  <dbConfigItem>
+    <configName>本部</configName>
+    <server>10.17.129.217</server>
+    <port>1521</port>
+    <sid>orcl</sid>
+    <user>USER_PTMP_V108</user>
+    <password>testgdpoi</password>
+  </dbConfigItem>
+  <dbConfigItem>
+    <configName>外包</configName>
+    <server>10.17.129.217</server>
+    <port>1521</port>
+    <sid>orcl</sid>
+    <user>USER_OUT_V108</user>
+    <password>testgdpoi</password>
+  </dbConfigItem>
+</DbConfigList>

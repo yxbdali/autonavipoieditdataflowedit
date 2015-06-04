@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"  fx:controller="com.autonavi.data.test.fxui.FXMLDocumentController"
+            id="MainBorderPane">
+    <top>
+        <MenuBar>
+            <Menu fx:id="FileMenu" text="File">
+                <!--<MenuItem fx:id="OpenFileMenu" text="Open" onAction="#openFileMenuAction" /> --> 
+                <MenuItem fx:id="SaveDataFlowPackageMenu" text="Save Data Flow Package" onAction="#SaveDataFlowPackageMenuAction"  />
+                <MenuItem fx:id="ExitMenu" text="Exit" />
+            </Menu>  
+        </MenuBar>
+    </top>
+    <center>
+        <!--<TabPane>
+            <tabs>
+                <Tab text="Data Flow Snapshot" closable="false" >-->
+                    <GridPane alignment="TOP_LEFT" hgap="10" vgap="10">
+                        <padding>
+                            <javafx.geometry.Insets top="20" bottom="20" left="20" right="20"/>    
+                        </padding>
+                        <columnConstraints>
+                            <ColumnConstraints fillWidth="true" hgrow="ALWAYS" />  
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints fillHeight="false" vgrow="NEVER"/>
+                            <RowConstraints fillHeight="true" vgrow="ALWAYS"/>    
+                        </rowConstraints>
+                        <!--<Label text="Data Flow Snapshot" alignment="CENTER"  GridPane.rowIndex="0" GridPane.columnSpan="3"/>-->
+                        <HBox  GridPane.rowIndex="0" >
+                            <children>
+                                <Label text="Data Flow Snapshot Package Name:"  >
+                                    <tooltip>
+                                        <Tooltip text="Fill the POI data GUID that you want to save"/> 
+                                    </tooltip>
+                                    <HBox.margin>
+                                        <javafx.geometry.Insets left="10" top="10" right="10" bottom="10"/> 
+                                    </HBox.margin>
+                                </Label> 
+                                <TextField fx:id="DataPackageNameTextField" prefWidth="200">
+                                    <HBox.margin>
+                                        <javafx.geometry.Insets left="10" top="10" right="10" bottom="10"/> 
+                                    </HBox.margin>
+                                </TextField>
+                                <Button text="Create" fx:id="CreateDataFlowPackageButton" prefWidth="75" onAction="#CreateDataFlowPackageButtonAction" >
+                                    <HBox.margin>
+                                        <javafx.geometry.Insets left="10" top="10" right="10" bottom="10"/> 
+                                    </HBox.margin>
+                                </Button>  
+                                <Label text="Product Line:">
+                                    <HBox.margin>
+                                        <javafx.geometry.Insets left="10" top="10" right="10" bottom="10"/> 
+                                    </HBox.margin>
+                                </Label>
+                                <ComboBox fx:id="ProductLineComboBox" prefWidth="120">
+                                    <HBox.margin>
+                                        <javafx.geometry.Insets left="10" top="10" right="10" bottom="10"/> 
+                                    </HBox.margin>
+                                </ComboBox> 
+                                <Label text="Database:">
+                                    <HBox.margin>
+                                        <javafx.geometry.Insets left="10" top="10" right="10" bottom="10"/> 
+                                    </HBox.margin>
+                                </Label>
+                                <ComboBox fx:id="DatabaseComboBox" prefWidth="100">
+                                    <HBox.margin>
+                                        <javafx.geometry.Insets left="10" top="10" right="10" bottom="10"/> 
+                                    </HBox.margin>
+                                </ComboBox> 
+                                
+                                <CheckBox fx:id="SaveAchieveCheckbox" text="Save achievement" >
+                                    <HBox.margin>
+                                        <javafx.geometry.Insets left="10" top="10" right="10" bottom="10"/> 
+                                    </HBox.margin>
+                                </CheckBox>
+                            </children> 
+                        </HBox>
+                        <GridPane GridPane.rowIndex="1" >
+                            <padding>
+                                <javafx.geometry.Insets top="20" bottom="20" left="20" right="20"/>    
+                            </padding>
+                            <rowConstraints>
+                                <RowConstraints fillHeight="true" vgrow="NEVER"/>  
+                                <RowConstraints fillHeight="true" vgrow="ALWAYS" />  
+                            </rowConstraints>
+                            <columnConstraints>
+                                <ColumnConstraints fillWidth="true" hgrow="ALWAYS" />
+                                <ColumnConstraints fillWidth="true" hgrow="ALWAYS" />  
+                                <!--<ColumnConstraints fillWidth="true" hgrow="ALWAYS" />-->
+                            </columnConstraints>
+                            
+                            <Label text="Data Flow Packages" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-font-weight: bolder" >
+                                <GridPane.margin>
+                                    <javafx.geometry.Insets left="10" top="10" right="10" bottom="10"/> 
+                                </GridPane.margin>
+                            </Label>
+                            <GridPane GridPane.rowIndex="1"  GridPane.columnIndex="0">
+                                <GridPane.margin>
+                                    <javafx.geometry.Insets left="10" top="10" right="10" bottom="10"/>    
+                                </GridPane.margin>
+                                <columnConstraints>
+                                    <ColumnConstraints fillWidth="true" hgrow="ALWAYS" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints fillHeight="true" vgrow="ALWAYS"  />
+                                    <RowConstraints fillHeight="false" vgrow="NEVER" />  
+                                </rowConstraints>
+                                <TableView fx:id="DataFlowSnapshotTableView" GridPane.rowIndex="0" >
+                                    <columns>
+                                        <TableColumn text="Name" editable="false">
+                                            <cellValueFactory>
+                                                <javafx.scene.control.cell.PropertyValueFactory property="packageName"/> 
+                                            </cellValueFactory>
+                                        </TableColumn>
+                                        <TableColumn text="Create Date" editable="false" >
+                                            <cellValueFactory>
+                                                <javafx.scene.control.cell.PropertyValueFactory property="createDate" /> 
+                                            </cellValueFactory>
+                                        </TableColumn> 
+                                        <TableColumn text="Product Line" editable="false">
+                                            <cellValueFactory>
+                                                <javafx.scene.control.cell.PropertyValueFactory property="dataFlowPackageType"/> 
+                                            </cellValueFactory>
+                                        </TableColumn>
+                                    </columns>
+                                    <!--<GridPane.margin>
+                                        <javafx.geometry.Insets left="10" top="10" right="10" bottom="10"/> 
+                                    </GridPane.margin>-->
+                                </TableView>
+                                <HBox GridPane.rowIndex="1" alignment="CENTER"  >
+                                    <Button text="Delete" prefWidth="75" 
+                                            fx:id="DeleteDataFlowDataButton" onAction="#DeleteDataFlowDataButtonAction" >
+                                        <tooltip>
+                                            <Tooltip text="Save data flow"/> 
+                                        </tooltip>
+                                        <HBox.margin>
+                                            <javafx.geometry.Insets right="10" top="10" /> 
+                                        </HBox.margin>
+                                    </Button>
+                                </HBox>
+                            </GridPane>
+                           
+                            <Label text="Task packages" GridPane.rowIndex="0" GridPane.columnIndex="1" style="-fx-font-weight: bolder" >
+                                <GridPane.margin>
+                                    <javafx.geometry.Insets left="10" top="10" right="10" bottom="10"/> 
+                                </GridPane.margin>
+                            </Label>
+                            <GridPane GridPane.rowIndex="1"  GridPane.columnIndex="1" >
+                                <GridPane.margin>
+                                    <javafx.geometry.Insets left="10" top="10" right="10" bottom="10"/>    
+                                </GridPane.margin>
+                                <columnConstraints>
+                                    <ColumnConstraints fillWidth="true" hgrow="ALWAYS" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints fillHeight="true" vgrow="ALWAYS"  />
+                                    <RowConstraints fillHeight="false" vgrow="NEVER" />  
+                                </rowConstraints>
+                                <TableView fx:id="TaskDataTableView" GridPane.rowIndex="0" prefWidth="400" editable="true" >
+                                    <columns>
+                                        <TableColumn id="TaskIdColumn"  text="Task ID" sortable="false" editable="false" prefWidth="150" >
+                                            <cellValueFactory>
+                                                <javafx.scene.control.cell.PropertyValueFactory property="taskId" /> 
+                                            </cellValueFactory>
+                                            <contextMenu>
+                                                <ContextMenu id="CopyTaskIdContextMenu" >
+                                                    <items>
+                                                        <MenuItem fx:id="CopyTaskIdContextMenuItem" text="Copy Task Id" onAction="#CopyTaskIdContextMenuItemAction" /> 
+                                                        <MenuItem id="DeleteTaskContextMenuItem" text="Delete Task package" onAction="#DeleteTaskContextMenuItemAction"  />
+                                                    </items>
+                                                </ContextMenu> 
+                                            </contextMenu>
+                                        </TableColumn>
+                                        <TableColumn text="Name" sortable="false" editable="true" prefWidth="100" >
+                                            <cellValueFactory>
+                                                <javafx.scene.control.cell.PropertyValueFactory property="taskName" /> 
+                                            </cellValueFactory>
+                                        </TableColumn>
+                                        <TableColumn text="Task Type" sortable="false"  editable="false">
+                                            <cellValueFactory>
+                                                <javafx.scene.control.cell.PropertyValueFactory property="taskType" /> 
+                                            </cellValueFactory>
+                                        </TableColumn>
+                                        <TableColumn text="SM" editable="false" >
+                                            <cellValueFactory>
+                                                <javafx.scene.control.cell.PropertyValueFactory property="sm" /> 
+                                            </cellValueFactory>
+                                        </TableColumn>
+                                        <TableColumn text="Database" editable="false">
+                                            <cellValueFactory>
+                                                <javafx.scene.control.cell.PropertyValueFactory property="dbConfigName"/> 
+                                            </cellValueFactory>
+                                        </TableColumn> 
+                                        <TableColumn text="Task Data Count" editable="false" >
+                                            <cellValueFactory>
+                                                <javafx.scene.control.cell.PropertyValueFactory property="taskDataCount" /> 
+                                            </cellValueFactory>
+                                        </TableColumn>
+                                        <TableColumn text="Create Date" editable="false" >
+                                            <cellValueFactory>
+                                                <javafx.scene.control.cell.PropertyValueFactory property="createDate" /> 
+                                            </cellValueFactory>
+                                        </TableColumn>
+                                        <TableColumn text="Comments" editable="true" fx:id="TaskCommentColumn" >
+                                            <cellValueFactory>
+                                                <javafx.scene.control.cell.PropertyValueFactory property="commentsVal">
+                                                </javafx.scene.control.cell.PropertyValueFactory>                                               
+                                            </cellValueFactory>
+                                        </TableColumn>
+                                    </columns>
+                                </TableView>
+                                <HBox GridPane.rowIndex="1" alignment="CENTER"  >
+                                    <Button text="Save" prefWidth="75" 
+                                            fx:id="SaveDataButton" onAction="#saveDataFlowButtonAction" >
+                                        <tooltip>
+                                            <Tooltip text="Save data flow"/> 
+                                        </tooltip>
+                                        <HBox.margin>
+                                            <javafx.geometry.Insets right="10" top="10" /> 
+                                        </HBox.margin>
+                                    </Button>
+                    
+                                    <Button fx:id="RollbackButton" text="Rollback"  prefWidth="75" onAction="#RollbackButtonAction" >
+                                        <HBox.margin>
+                                            <javafx.geometry.Insets right="10" top="10" /> 
+                                        </HBox.margin>
+                                    </Button>
+                                
+                                    <Button fx:id="DeleteTaskPackageDataButton" text="Delete" prefWidth="75" onAction="#DeleteTaskPackageDataButtonAction" >
+                                        <HBox.margin>
+                                            <javafx.geometry.Insets right="10" top="10" /> 
+                                        </HBox.margin>
+                                    </Button>
+                                
+                                    <Button fx:id="CopyTaskIdButton" text="Copy Task Id" onAction="#CopyTaskIdButtonAction" >
+                                        <HBox.margin>
+                                            <javafx.geometry.Insets right="10" top="10" /> 
+                                        </HBox.margin>
+                                    </Button>
+                                    
+                                    <!--
+                                    <Button fx:id="ViewDataButton" text="View Data" prefWidth="75" onAction="#ViewDataButtonAction"  >
+                                        <HBox.margin>
+                                            <javafx.geometry.Insets right="10" top="10" /> 
+                                        </HBox.margin>
+                                    </Button>
+                                    -->
+                                </HBox>
+                            </GridPane>   
+                            <!--
+                         <Label text="POI data" GridPane.rowIndex="0" GridPane.columnIndex="2"  >
+                                <GridPane.margin>
+                                    <javafx.geometry.Insets left="10" top="10" right="10" bottom="10"/> 
+                                </GridPane.margin>
+                            </Label> 
+                            <TableView fx:id="POIDataTableView" GridPane.rowIndex="1" GridPane.columnIndex="2">
+                                <columns>
+                                    <TableColumn text="POIID" editable="false">                                       
+                                        <cellValueFactory>
+                                            <javafx.scene.control.cell.PropertyValueFactory property="poiId"/> 
+                                        </cellValueFactory>
+                                    </TableColumn>
+                                    <TableColumn text="Name" editable="false" >
+                                        <cellValueFactory>
+                                            <javafx.scene.control.cell.PropertyValueFactory property="poiChnName" /> 
+                                        </cellValueFactory>
+                                    </TableColumn> 
+                                </columns>
+                                <GridPane.margin>
+                                    <javafx.geometry.Insets left="10" top="10" right="10" bottom="10"/> 
+                                </GridPane.margin>
+                            </TableView>
+                            -->
+                        </GridPane>
+                        
+                    </GridPane>   
+                <!--</Tab> 
+            </tabs>
+        </TabPane>     -->     
+    </center>
+</BorderPane>
