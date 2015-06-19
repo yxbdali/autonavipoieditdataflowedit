@@ -1,5 +1,5 @@
 ﻿<DataFlowQuery>
-  <dataFlowType>专项生产线</dataFlowType>
+  <dataFlowType>后期生产线</dataFlowType>
   <TaskQueryItem>
     <tableName>tdb_post_inner_task</tableName>
     <clause>WHERE TASK_ID = &apos;[TASKID]&apos;</clause>
@@ -54,6 +54,7 @@
       <clauseItem>TAG_ATTR_ID</clauseItem>
     </TableQueryItem>
 	
+    
 	<TableQueryItem>
       <tableName>REF_POST_THIRD_MAT</tableName>
       <clause>WHERE material_id IN (SELECT material_id FROM tdb_post_data_flow WHERE task_id = '[TASKID]')</clause>
@@ -72,6 +73,37 @@
       <clause>WHERE material_id IN (SELECT material_id FROM tdb_post_data_flow WHERE task_id = '[TASKID]')</clause>
       <clauseItem>MATERIAL_ID</clauseItem>
 	  <clauseItem>FEATURE_ID</clauseItem>
+    </TableQueryItem>
+	
+	
+	<TableQueryItem>
+      <tableName>mdb_rel_poi_edit_pc</tableName>
+      <clause>WHERE c_guid in (SELECT feature_id FROM tdb_post_data_flow WHERE task_id = &apos;[TASKID]&apos;)</clause>
+      <clauseItem>PC_ID</clauseItem>
+    </TableQueryItem>
+	
+	<TableQueryItem>
+      <tableName>mdb_mt_lock</tableName>
+      <clause>WHERE feature_id in (SELECT feature_id FROM tdb_post_data_flow WHERE task_id = &apos;[TASKID]&apos;)</clause>
+      <clauseItem>LOCK_ID</clauseItem>
+    </TableQueryItem>
+	
+	<TableQueryItem>
+      <tableName>REF_POST_0BUG_MAT</tableName>
+      <clause>WHERE MATERIAL_ID in (SELECT MATERIAL_ID FROM tdb_post_data_flow WHERE task_id = &apos;[TASKID]&apos;)</clause>
+      <clauseItem>MATERIAL_ID</clauseItem>
+    </TableQueryItem>
+	
+	<TableQueryItem>
+      <tableName>REF_POST_DIFF_ROAD</tableName>
+      <clause>WHERE SENIOR_TASK_ID in (SELECT SENIOR_TASK_ID FROM TDB_POST_INNER_TASK WHERE task_id = &apos;[TASKID]&apos;)</clause>
+      <clauseItem>LINK_ID</clauseItem>
+    </TableQueryItem>
+	
+	<TableQueryItem>
+      <tableName>REF_POST_TASKLIST_MAT</tableName>
+      <clause>WHERE MATERIAL_ID in (SELECT MATERIAL_ID FROM tdb_post_data_flow WHERE task_id = &apos;[TASKID]&apos;)</clause>
+      <clauseItem>MATERIAL_ID</clauseItem>
     </TableQueryItem>
 	
   </TaskQueryItem>

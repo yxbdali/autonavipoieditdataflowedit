@@ -17,7 +17,6 @@ import javafx.stage.FileChooser;
 import javax.swing.JOptionPane;
 import java.io.File;
 import com.autonavi.data.test.*;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -25,19 +24,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.List;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -46,18 +38,13 @@ import javafx.event.EventHandler;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TableColumn;
 import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.Clipboard;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.util.Callback;
 import javafx.util.StringConverter;
-import javax.management.OperationsException;
 
 /**
  *
@@ -65,9 +52,9 @@ import javax.management.OperationsException;
  */
 public class FXMLDocumentController implements Initializable {
 
-    private String workingDir = System.getProperty("user.dir");
-    private Path dataFlowPackageDir = Paths.get(workingDir + File.separator + "DataFlowPackages");
-    private String dataQueriesDir = workingDir + File.separator + "DataQueries";
+    private final String workingDir = System.getProperty("user.dir");
+    private final Path dataFlowPackageDir = Paths.get(workingDir + File.separator + "DataFlowPackages");
+    private final String dataQueriesDir = workingDir + File.separator + "DataQueries";
 
     private String startTaskGuid;
     private ArrayList<String> taskStageList;
@@ -495,6 +482,7 @@ public class FXMLDocumentController implements Initializable {
         String connectionString = composeConnectionString(dbConfigItem);
         boolean isSaveAchieve = SaveAchieveCheckbox.isSelected();
         DbTaskQueryConfigItem queryConfigItem = dbDataFlowQueryConfigItem.getTaskDataQueryConfigList().get(0);
+        /*
         if (!isSaveAchieve){
             List<DbTableQueryConfigItem> achieveDbTableQueryConfigItems = new ArrayList<>();
             for(DbTableQueryConfigItem tableQueryConfigItem : queryConfigItem.getDbTableQueryConfigList()){
@@ -507,6 +495,7 @@ public class FXMLDocumentController implements Initializable {
                 queryConfigItem.getDbTableQueryConfigList().remove(achieveDbTableQueryConfigItem);
             }
         }
+        */
         DbQueryHelper queryHelper = new DbQueryHelper(queryConfigItem, taskId, dbConfigItem.getConfigName());
 
         POITaskPackage poiTaskPackage = queryHelper.query(connectionString, dbConfigItem.getUser(), dbConfigItem.getPassword());

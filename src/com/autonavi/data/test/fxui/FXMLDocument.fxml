@@ -73,12 +73,13 @@
                                         <javafx.geometry.Insets left="10" top="10" right="10" bottom="10"/> 
                                     </HBox.margin>
                                 </ComboBox> 
-                                
+                                <!--
                                 <CheckBox fx:id="SaveAchieveCheckbox" text="Save achievement" >
                                     <HBox.margin>
                                         <javafx.geometry.Insets left="10" top="10" right="10" bottom="10"/> 
                                     </HBox.margin>
                                 </CheckBox>
+                                -->
                             </children> 
                         </HBox>
                         <GridPane GridPane.rowIndex="1" >
