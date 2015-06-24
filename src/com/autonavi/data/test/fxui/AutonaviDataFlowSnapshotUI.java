@@ -16,6 +16,7 @@ import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
+import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.WindowEvent;

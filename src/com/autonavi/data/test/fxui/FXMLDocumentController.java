@@ -44,6 +44,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.BorderPane;
 import javafx.util.StringConverter;
 
 /**
@@ -69,12 +70,12 @@ public class FXMLDocumentController implements Initializable {
 
     private DbDataFlowQueryConfigItem dbDataFlowQueryConfigItem;
     private List<DbDataFlowQueryConfigItem> dbDataFlowQueryConfigItemList;
-    
+
     private static FXMLDocumentController instance;
-    
+
     private DbConfigList dbConfigList;
-    
-    public static FXMLDocumentController getInstance(){
+
+    public static FXMLDocumentController getInstance() {
         return instance;
     }
 
@@ -107,6 +108,9 @@ public class FXMLDocumentController implements Initializable {
     }
 
     @FXML
+    private BorderPane MainBorderPane;
+
+    @FXML
     private Label label;
 
     @FXML
@@ -129,22 +133,22 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private TextField DataPackageNameTextField;
-    
+
     @FXML
     private TableColumn TaskIdColumn;
-    
+
     @FXML
     private TableColumn TaskCommentColumn;
-    
+
     @FXML
     private ContextMenu CopyTaskIdContextMenu;
-    
+
     @FXML
     private ComboBox ProductLineComboBox;
-    
+
     @FXML
     private ComboBox DatabaseComboBox;
-    
+
     @FXML
     private CheckBox SaveAchieveCheckbox;
 
@@ -179,13 +183,12 @@ public class FXMLDocumentController implements Initializable {
          chooseTaskDlgStage.setScene(scene);
          chooseTaskDlgStage.show();
          */
-       
         Object selectedObject = DataFlowSnapshotTableView.getSelectionModel().getSelectedItem();
-        if (selectedObject == null){
+        if (selectedObject == null) {
             JOptionPane.showMessageDialog(null, "Please select a data flow first!");
             return;
         }
-        
+
         String taskId = null;
 
         TextInputDialog textInputDialog = JavaFXDlgUtils.getTextInputDialog("Input task guid", "Please input task id", null);
@@ -249,8 +252,8 @@ public class FXMLDocumentController implements Initializable {
             alert.showAndWait();
             return;
         }
-        
-        if (isDataFlowPackageNameExisted(dataFlowPackageName)){
+
+        if (isDataFlowPackageNameExisted(dataFlowPackageName)) {
             Alert alert = JavaFXDlgUtils.getAlertDialog(Alert.AlertType.ERROR, null, "Data flow package name has existed, please change another one.");
             alert.showAndWait();
             return;
@@ -259,7 +262,7 @@ public class FXMLDocumentController implements Initializable {
         // Create a new POI data flow package
         String poiDataFlowPackageFilePath = workingDir + File.separator + "DataFlowPackages" + File.separator + dataFlowPackageName + ".dat";
         Path path = Paths.get(poiDataFlowPackageFilePath);
-        if (Files.exists(path)){
+        if (Files.exists(path)) {
             Alert alert = JavaFXDlgUtils.getAlertDialog(Alert.AlertType.ERROR, "Error", "The data flow package name has existed!\nPlease change another one!");
             alert.showAndWait();
             return;
@@ -277,108 +280,107 @@ public class FXMLDocumentController implements Initializable {
     private void SaveDataFlowPackageMenuAction(ActionEvent event) throws IOException {
         saveDataFlows();
     }
-    
+
     @FXML
-    private void ExitMenuAction(ActionEvent event){
-        
+    private void ExitMenuAction(ActionEvent event) {
+
     }
-    
+
     @FXML
-    private void RollbackButtonAction(ActionEvent event){
+    private void RollbackButtonAction(ActionEvent event) {
         Object selectedObj = TaskDataTableView.getSelectionModel().getSelectedItem();
-        
-        if (selectedObj == null){
+
+        if (selectedObj == null) {
             Alert alert = JavaFXDlgUtils.getAlertDialog(Alert.AlertType.WARNING, null, "Please select a task first!");
             alert.showAndWait();
             return;
         }
-        
-        POITaskPackage poiTaskPackage = (POITaskPackage)selectedObj;
-        
-        try{
+
+        POITaskPackage poiTaskPackage = (POITaskPackage) selectedObj;
+
+        try {
             DbConfigItem dbConfigItem = findDbConfigItem(dbConfigList, poiTaskPackage.getDbConfigName());
             String connection = composeConnectionString(dbConfigItem);
             RollbackHelper.rollback(dbDataFlowQueryConfigItem, poiTaskPackage, connection, dbConfigItem.getUser(), dbConfigItem.getPassword());
-            Alert messageAlert = JavaFXDlgUtils.getAlertDialog(Alert.AlertType.INFORMATION, "Success", 
+            Alert messageAlert = JavaFXDlgUtils.getAlertDialog(Alert.AlertType.INFORMATION, "Success",
                     String.format("The task '%s' has been rollback", poiTaskPackage.getTaskId()));
             messageAlert.showAndWait();
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Alert alert = JavaFXDlgUtils.getExceptionDialog("Exception", "Exception was throwed", "The details is", e);
             alert.showAndWait();
         }
-        
+
     }
-    
+
     @FXML
     private void CopyTaskIdContextMenuItemAction(ActionEvent event) {
         Object selectedObj = TaskDataTableView.getSelectionModel().getSelectedItem();
-        if (selectedObj != null){
-            POITaskPackage poiTaskPackage = (POITaskPackage)selectedObj;
+        if (selectedObj != null) {
+            POITaskPackage poiTaskPackage = (POITaskPackage) selectedObj;
             copyToClipboard(poiTaskPackage.getTaskId());
         }
     }
-    
+
     @FXML
-    private void CopyTaskIdButtonAction(ActionEvent event){
+    private void CopyTaskIdButtonAction(ActionEvent event) {
         Object selectedObj = TaskDataTableView.getSelectionModel().getSelectedItem();
-        if (selectedObj != null){
-            POITaskPackage poiTaskPackage = (POITaskPackage)selectedObj;
+        if (selectedObj != null) {
+            POITaskPackage poiTaskPackage = (POITaskPackage) selectedObj;
             copyToClipboard(poiTaskPackage.getTaskId());
         }
     }
-    
+
     @FXML
-    private void DeleteTaskPackageDataButtonAction(ActionEvent event){
+    private void DeleteTaskPackageDataButtonAction(ActionEvent event) {
         Object selectedObj = TaskDataTableView.getSelectionModel().getSelectedItem();
-        if (selectedObj != null){
-            POITaskPackage poiTaskPackage = (POITaskPackage)selectedObj;
+        if (selectedObj != null) {
+            POITaskPackage poiTaskPackage = (POITaskPackage) selectedObj;
             POIDataFlowPackage poiDataFlowPackage = selecteDataFlowPackageInfoBundle.getPOIDataFlowPackage();
             poiDataFlowPackage.Delete(poiTaskPackage);
         }
     }
-    
+
     @FXML
-    private void DeleteTaskContextMenuItemAction(ActionEvent event){
+    private void DeleteTaskContextMenuItemAction(ActionEvent event) {
         Object selectedObj = TaskDataTableView.getSelectionModel().getSelectedItem();
-        if (selectedObj != null){
-            POITaskPackage poiTaskPackage = (POITaskPackage)selectedObj;
+        if (selectedObj != null) {
+            POITaskPackage poiTaskPackage = (POITaskPackage) selectedObj;
             POIDataFlowPackage poiDataFlowPackage = selecteDataFlowPackageInfoBundle.getPOIDataFlowPackage();
             poiDataFlowPackage.Delete(poiTaskPackage);
         }
     }
-    
+
     @FXML
     private void DeleteDataFlowDataButtonAction(ActionEvent event) throws IOException {
         Alert confirmAlert = JavaFXDlgUtils.getAlertDialog(Alert.AlertType.CONFIRMATION, null, "Do you want to delete the selected data flow Package");
         Optional<ButtonType> result = confirmAlert.showAndWait();
-        if (result.get() == ButtonType.CANCEL){
+        if (result.get() == ButtonType.CANCEL) {
             return;
         }
-        
+
         Object seletedObj = DataFlowSnapshotTableView.getSelectionModel().getSelectedItem();
-        if (seletedObj != null){
-            POIDataFlowPackage poiDataFlowPackage = (POIDataFlowPackage)seletedObj;
+        if (seletedObj != null) {
+            POIDataFlowPackage poiDataFlowPackage = (POIDataFlowPackage) seletedObj;
             poiDataFlowPackageList.remove(poiDataFlowPackage);
             TaskDataTableView.setItems(null);
-            
+
             DataFlowPackageInfoBundle dataFlowPackageInfoBundle = dataFlowPackageInfoBundleList.findDataFlowPackageInfoBundle(poiDataFlowPackage);
-            if (dataFlowPackageInfoBundle != null){
+            if (dataFlowPackageInfoBundle != null) {
                 dataFlowPackageInfoBundleList.remove(dataFlowPackageInfoBundle);
                 String dataFlowPackageFilePath = dataFlowPackageInfoBundle.getPOIDataFlowPackageFilePath();
                 Path path = Paths.get(dataFlowPackageFilePath);
-                if (Files.exists(path)){
+                if (Files.exists(path)) {
                     Files.delete(path);
                 }
             }
         }
     }
-    
+
     @FXML
-    private void ViewDataButtonAction(ActionEvent event){
+    private void ViewDataButtonAction(ActionEvent event) {
         Object object = TaskDataTableView.getSelectionModel().getSelectedItem();
-        if (object != null){
-            POITaskPackage poiTaskPackage = (POITaskPackage)object;
+        if (object != null) {
+            POITaskPackage poiTaskPackage = (POITaskPackage) object;
             ArrayList<POIDataItem> poiDataItemList = poiTaskPackage.getPOIDataList();
             ArrayList<POIDataItemBase> dbDataItemList = poiTaskPackage.getDbDataList();
             Dialog dialog = JavaFXDlgUtils.getTaskPackageDataDialog("Task data", "Task Data", poiDataItemList, dbDataItemList, dbDataFlowQueryConfigItem);
@@ -395,7 +397,7 @@ public class FXMLDocumentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        
+
         try {
             initializeDataQueries();
             initializeDataFlowPackages();
@@ -407,49 +409,55 @@ public class FXMLDocumentController implements Initializable {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
                 POIDataFlowPackage selectedDataFlowPackage = (POIDataFlowPackage) newValue;
+
                 selecteDataFlowPackageInfoBundle = dataFlowPackageInfoBundleList.findDataFlowPackageInfoBundle(selectedDataFlowPackage);
                 if (selectedDataFlowPackage != null) {
                     ObservableList<POITaskPackage> dataList = selectedDataFlowPackage.getTaskPackageListProperty();
                     TaskDataTableView.setItems(dataList);
                     TaskDataTableView.getSelectionModel().clearSelection();
+
+                    String productLine = selectedDataFlowPackage.getDataFlowPackageType();
+                    for (DbDataFlowQueryConfigItem item : dbDataFlowQueryConfigItemList) {
+                        if (item.getDataFlowType().equalsIgnoreCase(productLine)) {
+                            ProductLineComboBox.getSelectionModel().select(item);
+                        }
+                    }
                 }
             }
         });
-     
+
         initializeTableActions();
-        try{
-        initializeDatabaseComboBox();
-        }
-        catch(IOException e){
+        try {
+            initializeDatabaseComboBox();
+        } catch (IOException e) {
             e.printStackTrace();
         }
         /*
-        TaskDataTableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                POITaskPackage selectedPOITaskPackage = (POITaskPackage) newValue;
+         TaskDataTableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+         @Override
+         public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+         POITaskPackage selectedPOITaskPackage = (POITaskPackage) newValue;
                 
-                if (selectedPOITaskPackage != null) {
-                    ObservableList<POIDataItem> dataList = selectedPOITaskPackage.getPOIDataListProperty();
-                    POIDataTableView.setItems(dataList);
-                }
+         if (selectedPOITaskPackage != null) {
+         ObservableList<POIDataItem> dataList = selectedPOITaskPackage.getPOIDataListProperty();
+         POIDataTableView.setItems(dataList);
+         }
                         
-                System.out.println(selectedPOITaskPackage.getTaskId());
-            }
-        });
-        */
-        
-        
-        TaskDataTableView.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>(){
+         System.out.println(selectedPOITaskPackage.getTaskId());
+         }
+         });
+         */
+
+        TaskDataTableView.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
-            public void handle(MouseEvent e){
+            public void handle(MouseEvent e) {
                 //MouseButton mouseButton = e.getButton();
                 //if(e.getButton() == MouseButton.PRIMARY){
                 //    CopyTaskIdContextMenu.show(TaskDataTableView, e.getScreenX(), e.getScreenY());
                 //}
             }
         });
-        
+
         TaskDataTableView.setContextMenu(CopyTaskIdContextMenu);
     }
 
@@ -477,30 +485,35 @@ public class FXMLDocumentController implements Initializable {
         }
     }
 
+    /**
+     * Save task data snapshot with given task id
+     * 
+     */
     private void saveTaskDataSnapshot(String taskId) throws SQLException, Exception {
-        DbConfigItem dbConfigItem =  (DbConfigItem)DatabaseComboBox.getSelectionModel().getSelectedItem();
+        DbConfigItem dbConfigItem = (DbConfigItem) DatabaseComboBox.getSelectionModel().getSelectedItem();
         String connectionString = composeConnectionString(dbConfigItem);
-        boolean isSaveAchieve = SaveAchieveCheckbox.isSelected();
+        //boolean isSaveAchieve = SaveAchieveCheckbox.isSelected();
         DbTaskQueryConfigItem queryConfigItem = dbDataFlowQueryConfigItem.getTaskDataQueryConfigList().get(0);
         /*
-        if (!isSaveAchieve){
-            List<DbTableQueryConfigItem> achieveDbTableQueryConfigItems = new ArrayList<>();
-            for(DbTableQueryConfigItem tableQueryConfigItem : queryConfigItem.getDbTableQueryConfigList()){
-                if(tableQueryConfigItem.getTableName().equalsIgnoreCase("mdb_poi") || 
-                        tableQueryConfigItem.getTableName().equalsIgnoreCase("mdb_poi_chargepile")){
-                    achieveDbTableQueryConfigItems.add(tableQueryConfigItem);
-                }
-            }
-            for (DbTableQueryConfigItem achieveDbTableQueryConfigItem : achieveDbTableQueryConfigItems) {
-                queryConfigItem.getDbTableQueryConfigList().remove(achieveDbTableQueryConfigItem);
-            }
-        }
-        */
-        DbQueryHelper queryHelper = new DbQueryHelper(queryConfigItem, taskId, dbConfigItem.getConfigName());
+         if (!isSaveAchieve){
+         List<DbTableQueryConfigItem> achieveDbTableQueryConfigItems = new ArrayList<>();
+         for(DbTableQueryConfigItem tableQueryConfigItem : queryConfigItem.getDbTableQueryConfigList()){
+         if(tableQueryConfigItem.getTableName().equalsIgnoreCase("mdb_poi") || 
+         tableQueryConfigItem.getTableName().equalsIgnoreCase("mdb_poi_chargepile")){
+         achieveDbTableQueryConfigItems.add(tableQueryConfigItem);
+         }
+         }
+         for (DbTableQueryConfigItem achieveDbTableQueryConfigItem : achieveDbTableQueryConfigItems) {
+         queryConfigItem.getDbTableQueryConfigList().remove(achieveDbTableQueryConfigItem);
+         }
+         }
+         */
 
+        DbQueryHelper queryHelper = new DbQueryHelper(queryConfigItem, taskId, dbConfigItem.getConfigName());
         POITaskPackage poiTaskPackage = queryHelper.query(connectionString, dbConfigItem.getUser(), dbConfigItem.getPassword());
-        if (poiTaskPackage.getTaskName() == null || poiTaskPackage.getTaskName().equalsIgnoreCase("")){
-            throw new Exception(String.format("%s\n%s\n\n", "No task can be queried from given task id " + taskId, 
+
+        if (poiTaskPackage.getTaskName() == null || poiTaskPackage.getTaskName().equalsIgnoreCase("")) {
+            throw new Exception(String.format("%s\n%s\n\n", "No task can be queried from given task id " + taskId,
                     "Please check your selected product line and database are correct"));
         }
         if (selecteDataFlowPackageInfoBundle != null) {
@@ -508,108 +521,116 @@ public class FXMLDocumentController implements Initializable {
             selecteDataFlowPackage.Add(poiTaskPackage);
         }
     }
-    
-    private void copyToClipboard(String content){
+
+    /**
+     * Copy to clipboard
+     * 
+     * @param content 
+     */
+    private void copyToClipboard(String content) {
         ClipboardContent clipboardContent = new ClipboardContent();
         clipboardContent.putString(content);
         Clipboard.getSystemClipboard().setContent(clipboardContent);
     }
-    
-    private void initializeDataQueries() throws IOException{
+
+    private void initializeDataQueries() throws IOException {
         dbDataFlowQueryConfigItemList = new ArrayList<>();
         Path path = Paths.get(dataQueriesDir);
-        if (Files.exists(path)){
-            try(DirectoryStream<Path> streams = Files.newDirectoryStream(path)){
+        if (Files.exists(path)) {
+            try (DirectoryStream<Path> streams = Files.newDirectoryStream(path)) {
                 for (Path stream : streams) {
                     DbDataFlowQueryConfigItem item = DbDataFlowQueryConfigItem.xstreamDeserialize(stream.toString());
                     dbDataFlowQueryConfigItemList.add(item);
                 }
             }
-        }
-        else{
+        } else {
             Files.createDirectory(path);
         }
-        
+
         ProductLineComboBox.setItems(FXCollections.observableArrayList(dbDataFlowQueryConfigItemList));
         ProductLineComboBox.setConverter(new StringConverter() {
 
             @Override
             public String toString(Object object) {
-                DbDataFlowQueryConfigItem _item = (DbDataFlowQueryConfigItem)object;
+                DbDataFlowQueryConfigItem _item = (DbDataFlowQueryConfigItem) object;
                 return _item.getDataFlowType();
                 //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
 
             @Override
             public Object fromString(String string) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                for (DbDataFlowQueryConfigItem item : dbDataFlowQueryConfigItemList) {
+                    if (item.getDataFlowType().equalsIgnoreCase(string)) {
+                        return item;
+                    }
+                }
+                return null;
             }
         });
-        
+
         ProductLineComboBox.getSelectionModel().selectFirst();
         dbDataFlowQueryConfigItem = dbDataFlowQueryConfigItemList.get(0);
         ProductLineComboBox.valueProperty().addListener(new ChangeListener() {
 
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                dbDataFlowQueryConfigItem = (DbDataFlowQueryConfigItem)newValue;
+                dbDataFlowQueryConfigItem = (DbDataFlowQueryConfigItem) newValue;
                 System.out.println("Selected " + dbDataFlowQueryConfigItem.getDataFlowType());
             }
         });
     }
-    
-    private boolean isDataFlowPackageNameExisted(String dataFlowPackageName){
-        for(DataFlowPackageInfoBundle item : dataFlowPackageInfoBundleList){
-            if (item.getPOIDataFlowPackage().getPackageName().equalsIgnoreCase(dataFlowPackageName)){
+
+    private boolean isDataFlowPackageNameExisted(String dataFlowPackageName) {
+        for (DataFlowPackageInfoBundle item : dataFlowPackageInfoBundleList) {
+            if (item.getPOIDataFlowPackage().getPackageName().equalsIgnoreCase(dataFlowPackageName)) {
                 return true;
             }
         }
         return false;
     }
-    
-    public void saveDataFlows() throws IOException{
-        for (DataFlowPackageInfoBundle dataFlowPackageInfoBundle : dataFlowPackageInfoBundleList){
+
+    public void saveDataFlows() throws IOException {
+        for (DataFlowPackageInfoBundle dataFlowPackageInfoBundle : dataFlowPackageInfoBundleList) {
             POIDataFlowPackage poiDataFlowPackage = dataFlowPackageInfoBundle.getPOIDataFlowPackage();
             String file = dataFlowPackageInfoBundle.getPOIDataFlowPackageFilePath();
-            
+
             poiDataFlowPackage.serialize(file);
         }
     }
-    
-    private void initializeTableActions(){
+
+    private void initializeTableActions() {
         TaskCommentColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        
+
         //TaskCommentColumn.setCellFactory(null);
-        
-        TaskCommentColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<POITaskPackage, String>>(){
+        TaskCommentColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<POITaskPackage, String>>() {
             @Override
-            public void handle(TableColumn.CellEditEvent<POITaskPackage, String> t){
+            public void handle(TableColumn.CellEditEvent<POITaskPackage, String> t) {
                 String newComments = t.getNewValue();
                 t.getTableView().getSelectionModel().getSelectedItem().setCommentsVal(newComments);
             }
         });
         /*
-        TaskCommentColumn.setCellFactory(new Callback<TableColumn<POITaskPackage, String>, TableCell<POITaskPackage, String>>(){
-            @Override
-            public TableCell<POITaskPackage, String> call(TableColumn<POITaskPackage, String> column) {
-                TextFieldTableCell<POITaskPackage, String> tableCell = new TextFieldTableCell<POITaskPackage, String>(){
-                        @Override
-			public void updateItem(String item, boolean empty) {
-                            if(item!=null){
-                                setTooltip(new Tooltip(item));
-                                setText(item);                                
-                            }
-                        }
-                };
+         TaskCommentColumn.setCellFactory(new Callback<TableColumn<POITaskPackage, String>, TableCell<POITaskPackage, String>>(){
+         @Override
+         public TableCell<POITaskPackage, String> call(TableColumn<POITaskPackage, String> column) {
+         TextFieldTableCell<POITaskPackage, String> tableCell = new TextFieldTableCell<POITaskPackage, String>(){
+         @Override
+         public void updateItem(String item, boolean empty) {
+         if(item!=null){
+         setTooltip(new Tooltip(item));
+         setText(item);                                
+         }
+         }
+         };
                 
-                tableCell.setEditable(true);
-                return tableCell;
-            }
-        });
-                */
+         tableCell.setEditable(true);
+         return tableCell;
+         }
+         });
+         */
     }
-    
-    private void initializeDatabaseComboBox() throws IOException{
+
+    private void initializeDatabaseComboBox() throws IOException {
         String dbConfigListFile = workingDir + File.separator + "DbConfigList.xml";
         dbConfigList = DbConfigList.deserialize(dbConfigListFile);
         DatabaseComboBox.setItems(FXCollections.observableArrayList(dbConfigList.getDbConfigItemList()));
@@ -618,8 +639,8 @@ public class FXMLDocumentController implements Initializable {
 
             @Override
             public String toString(Object object) {
-                DbConfigItem dbConfigItem = (DbConfigItem)object;
-                return  dbConfigItem.getConfigName();
+                DbConfigItem dbConfigItem = (DbConfigItem) object;
+                return dbConfigItem.getConfigName();
             }
 
             @Override
@@ -628,18 +649,18 @@ public class FXMLDocumentController implements Initializable {
             }
         });
     }
-    
-    private String composeConnectionString(DbConfigItem dbConfigItem){
+
+    private String composeConnectionString(DbConfigItem dbConfigItem) {
         String server = dbConfigItem.getServer();
         String port = dbConfigItem.getPort();
         String sid = dbConfigItem.getSid();
-        
-        return  String.format("jdbc:oracle:thin:@%s:%s:%s", server, port, sid);
+
+        return String.format("jdbc:oracle:thin:@%s:%s:%s", server, port, sid);
     }
-    
-    private DbConfigItem findDbConfigItem(DbConfigList dbConfigList, String dbConfigName){
-        for(DbConfigItem dbConfigItem : dbConfigList.getDbConfigItemList()){
-            if (dbConfigItem.getConfigName().equalsIgnoreCase(dbConfigName)){
+
+    private DbConfigItem findDbConfigItem(DbConfigList dbConfigList, String dbConfigName) {
+        for (DbConfigItem dbConfigItem : dbConfigList.getDbConfigItemList()) {
+            if (dbConfigItem.getConfigName().equalsIgnoreCase(dbConfigName)) {
                 return dbConfigItem;
             }
         }
